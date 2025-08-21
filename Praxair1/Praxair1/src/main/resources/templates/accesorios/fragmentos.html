@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Praxair</title>
+    </head>
+    <body>
+        <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">   
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarAccesorio">
+                            <i class="fas fa-plus"></i> [[#{accesorio.agregar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 Fragmento para agregar producto, es la ventana modal -->
+        <section th:fragment="agregarAccesorio">
+            <div id="agregarAccesorio" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{accesorio.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        
+                        <!-- FORMULARIO CORREGIDO -->
+                        <form th:action="@{/accesorio/guardar}" th:object="${accesorio}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nombre">Nombre del Accesorio</label>
+                                    <input type="text" class="form-control" name="nombre" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="descripcion">[[#{accesorio.descripcion}]]</label>
+                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="precio">[[#{accesorio.precio}]]</label>
+                                            <input type="number" class="form-control" name="precio" step="0.01" min="0" required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="stock">[[#{accesorio.stock}]]</label>
+                                            <input type="number" class="form-control" name="stock" min="0" required="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Campo de imagen -->
+                                <div class="mb-3">
+                                    <label for="imagenFile">Imagen del Accesorio (opcional)</label>
+                                    <input type="file" class="form-control" name="imagenFile" accept="image/*"/>
+                                </div>
+                            </div>
+                            
+                            <!-- BOTONES DEL MODAL - DENTRO DEL FORMULARIO -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> [[#{accion.guardar}]]
+                                </button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Sección principal para mostrar la información de la entidad producto -->
+        <section th:fragment="listadoAccesorios" id="accesorios">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{accesorio.listado}]]</h4>
+                            </div>
+                            <div th:if="${accesorios != null and !accesorios.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombre</th>
+                                            <th>[[#{accesorio.descripcion}]]</th>
+                                            <th>[[#{accesorio.precio}]]</th>
+                                            <th>[[#{accesorio.stock}]]</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="accesorio, contador : ${accesorios}">
+                                            <td>[[${contador.count}]]</td>
+                                            <td>[[${accesorio.nombre}]]</td>
+                                            <td>[[${accesorio.descripcion}]]</td>
+                                            <td th:text="${'$' + #numbers.formatDecimal(accesorio.precio, 1, 2)}"></td>
+                                            <td>[[${accesorio.stock}]]</td>
+                                            <td>
+                                                <a th:href="@{/accesorio/eliminar/}+${accesorio.idAccesorio}"
+                                                   class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                                </a>
+                                                <a th:href="@{/accesorio/modificar/}+${accesorio.idAccesorio}"
+                                                   class="btn btn-success btn-sm">
+                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${accesorios == null or accesorios.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-primary text-white mb-3">
+                            <div class="card-body">
+                                <h3>[[#{accesorio.total}]]</h3>
+                                <h4 class="fs-2"><i class="fas fa-box"></i> [[${totalAccesorios}]]</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 Fragmento que se utiliza en la página modifica.html -->
+        <section th:fragment="editarAccesorio">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST"
+                          th:action="@{/accesorio/guardar}" 
+                          th:object="${accesorio}"
+                          class="was-validated"                          
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="idAccesorio" th:field="*{idAccesorio}"/>
+                        <section th:replace="~{accesorios/fragmentos :: botonesEditar}"/>
+                        <div id="details">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>[[#{accion.actualizar}]]</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label for="nombre">Nombre del Accesorio</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="nombre" th:field="*{nombre}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="descripcion">[[#{accesorio.descripcion}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="descripcion" th:field="*{descripcion}"
+                                                           required="true">
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="precio">[[#{accesorio.precio}]]</label>
+                                                            <input type="number" class="form-control" 
+                                                                   name="precio" th:field="*{precio}" 
+                                                                   step="0.01" min="0" required="true">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="stock">[[#{accesorio.stock}]]</label>
+                                                            <input type="number" class="form-control" 
+                                                                   name="stock" th:field="*{stock}" 
+                                                                   min="0" required="true">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Campo de imagen (opcional) -->
+                                                <div class="mb-3">
+                                                    <label for="imagenFile">Imagen del Accesorio (opcional)</label>
+                                                    <input type="file" class="form-control" name="imagenFile" accept="image/*"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
+        <section th:fragment="botonesEditar">
+            <div class="container py-4 mb-4 bg-light">
+                <div class="row">
+                    <div class="col-md-4 d-grid">
+                        <a th:href="@{/accesorio/listado}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">                                
+                        <a th:href="@{/accesorio/eliminar/}+${accesorio.idAccesorio}"
+                           class="btn btn-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Script para previsualizar imagen -->
+        <script>
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#blah').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
+    </body>
+</html>

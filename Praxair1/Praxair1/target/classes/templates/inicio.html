@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/plantilla :: head"></head>
+
+<body>
+    <!-- Header reutilizado desde la plantilla -->
+    <div th:replace="layout/plantilla :: header"></div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5" th:fragment="content">
+        <div class="row g-4">
+            <!-- QUIÉNES SOMOS -->
+            <div class="col-md-4">
+                <div class="card-custom card-border-gray">
+                    <h5>¿QUIÉNES SOMOS?</h5>
+                    <p>
+                        Praxair es una empresa líder en el sector de gases industriales, especializada en la
+                        distribución y comercialización de gases técnicos, medicinales e industriales, así como en
+                        accesorios y equipos para soldadura...
+                    </p>
+                </div>
+            </div>
+
+            <!-- MISIÓN -->
+            <div class="col-md-4">
+                <div class="card-custom card-border-green">
+                    <h5>MISIÓN</h5>
+                    <p>
+                        Proveer soluciones integrales en gases industriales y equipos de soldadura de la más alta
+                        calidad, mediante la distribución eficiente de productos especializados y la implementación
+                        de instalaciones técnicas seguras y confiables...
+                    </p>
+                </div>
+            </div>
+
+            <!-- VISIÓN -->
+            <div class="col-md-4">
+                <div class="card-custom card-border-blue">
+                    <h5>VISIÓN</h5>
+                    <p>
+                        Ser la empresa líder y de referencia en el mercado de gases industriales y soluciones de
+                        soldadura, reconocida por nuestra excelencia en el servicio, innovación tecnológica y
+                        compromiso con la seguridad...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer reutilizado -->
+    <div th:replace="layout/plantilla :: footer"></div>
+
+    <!-- Estilos adicionales para las tarjetas -->
+    <style>
+        .card-custom {
+            border-radius: 12px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        .card-custom h5 {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .card-border-gray { border-left: 6px solid #ccc; }
+        .card-border-green { border-left: 6px solid #28a745; }
+        .card-border-blue { border-left: 6px solid #0d6efd; }
+    </style>
+</body>
+</html>

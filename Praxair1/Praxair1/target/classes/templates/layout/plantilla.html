@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praxair - Gestión</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <style>
+        /* Ajustes para las tarjetas */
+        .card-custom {
+            border-radius: 12px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        .card-custom h5 {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .card-border-gray { border-left: 6px solid #ccc; }
+        .card-border-green { border-left: 6px solid #28a745; }
+        .card-border-blue { border-left: 6px solid #0d6efd; }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Praxair_logo.svg" alt="Praxair Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/inicio}">Inicio</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" th:href="@{/gas/listado}">[[#{plantilla.gases}]]</a></li> 
+                    <li class="nav-item px-2"><a class="nav-link" th:href="@{/accesorio/listado}">[[#{plantilla.accesorios}]]</a></li> 
+                    <li class="nav-item"><a class="nav-link" th:href="@{/accesorios}">Accesorios de Soldadura</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/visita}">Agendar visita técnica</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/carrito}"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- FOOTER -->
+<footer th:fragment="footer" class="bg-dark text-white mt-5">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Praxair</h5>
+                <p class="mb-0">Soluciones integrales en gases industriales y equipos de soldadura.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="mb-0">© Praxair 2025</p>
+                <small class="text-muted">Desarrollado con Spring Boot, Thymeleaf y Bootstrap 5</small>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
