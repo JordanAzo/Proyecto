@@ -1,0 +1,56 @@
+ -- Crear la base de datos
+CREATE DATABASE Praxair1;
+USE Praxair1;
+
+-- Tabla de Gases
+CREATE TABLE Gases (
+    id_gas INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT DEFAULT 0
+);
+
+-- Tabla de Accesorios
+CREATE TABLE Accesorios (
+    id_accesorio INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT DEFAULT 0
+);
+
+-- Tabla Carrito (puede contener gases y/o accesorios)
+CREATE TABLE Carrito (
+    id_carrito INT AUTO_INCREMENT PRIMARY KEY,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10,2) DEFAULT 0
+);
+
+-- Detalle del carrito (relación con productos)
+CREATE TABLE Carrito_Detalle (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    id_carrito INT,
+    tipo_producto ENUM('Gas','Accesorio') NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_carrito) REFERENCES Carrito(id_carrito) ON DELETE CASCADE
+);
+
+-- Tabla de Visitas Técnicas
+CREATE TABLE Visitas_Tecnicas (
+    id_visita INT AUTO_INCREMENT PRIMARY KEY,
+    cliente VARCHAR(150) NOT NULL,
+    fecha_visita DATE NOT NULL,
+    tecnico VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    estado ENUM('Pendiente','Realizada','Cancelada') DEFAULT 'Pendiente'
+);
+
+
+CREATE USER 'usuario_praxair'@'localhost' IDENTIFIED BY 'praxair1';
+
+GRANT ALL PRIVILEGES ON Praxair1.* TO 'usuario_praxair'@'localhost';
+
+FLUSH PRIVILEGES;
